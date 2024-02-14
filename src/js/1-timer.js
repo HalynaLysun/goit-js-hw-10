@@ -3,9 +3,10 @@ import flatpickr from "flatpickr";
 // Додатковий імпорт стилів
 import "flatpickr/dist/flatpickr.min.css";
 
+
+
 const inputEl = document.querySelector('#datetime-picker')
 const buttonEl = document.querySelector('button[data-start]')
-
 
 const options = {
   enableTime: true,
@@ -17,5 +18,5 @@ const options = {
   },
 };
 
-flatpickr('input', options);
+flatpickr(inputEl, options);
 
