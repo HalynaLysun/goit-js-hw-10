@@ -6,8 +6,16 @@ import "flatpickr/dist/flatpickr.min.css";
 const inputEl = document.querySelector('#datetime-picker')
 const buttonEl = document.querySelector('button[data-start]')
 
-const option = flatpickr('#datetime-picker', {
-    "enableTime": true,
-    "plugins": [new confirmDatePlugin({})]
-});
+
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    console.log(selectedDates[0]);
+  },
+};
+
+flatpickr('input', options);
 
