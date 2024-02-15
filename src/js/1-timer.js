@@ -14,5 +14,5 @@ const options = {
   },
 };
 
-flatpickr('#datetime-picker', options);
+flatpickr(inputEl, options);
 
