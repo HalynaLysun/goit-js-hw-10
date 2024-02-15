@@ -4,7 +4,7 @@ import "flatpickr/dist/flatpickr.min.css";
 const inputEl = document.querySelector('#datetime-picker')
 const buttonEl = document.querySelector('button[data-start]')
 
-inputEl.disabled = true;
+// inputEl.disabled = true;
 buttonEl.disabled = true;
 
 const options = {
