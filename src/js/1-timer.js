@@ -10,9 +10,9 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[1]);
+    console.log(selectedDates[0]);
   },
 };
 
-flatpickr(inputEl, options);
+flatpickr('#datetime-picker', options);
 
