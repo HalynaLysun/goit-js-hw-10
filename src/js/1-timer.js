@@ -1,43 +1,45 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
-class Timer { 
-  constructor({onTick}) {
-    this.onTick = onTick;    
-  }
-}
-
 const inputEl = document.querySelector('#datetime-picker')
 const startBtn = document.querySelector('button[data-start]')
-const days = document.querySelector('[data-days]')
-const hours = document.querySelector('[data-hours]')
-console.log(days)
 
-// inputEl.disabled = true;
-// startBtn.disabled = true;
-startBtn.addEventListener('click', () => {
-  let date = new Date(inputEl.value)
-  const milliseconds = date.getTime()
-  // console.log(milliseconds)
-  if (milliseconds < Date.now()) {
-    alert('Error!!! Illegal operation')
-  } else { 
-    const timer = milliseconds - Date.now()
-    convertMs(timer)
-    // days.textContent = timer.days
-}
-})
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    console.log(selectedDates[0]);
+  },
+};
 
-const timerOn = new Timer ({
-  onTick: updateTimer,
-})
+flatpickr(inputEl, options);
 
-function updateTimer({ days, hours, minutes, seconds }) {
-  days.textContent = days
-  hours.text.content = hours
-}
 
-function convertMs(ms) {
+class Timer { 
+  constructor({onTick}) {
+    this.onTick = onTick;
+    this.interval = null;
+  }
+
+  start() {
+    const startTime = new Date(inputEl.value)
+    const milliseconds = startTime.getTime()
+    if (milliseconds < Date.now()) {
+      alert('Error!!! Illegal operation')
+    } else {
+      this.interval = setInterval(() => {
+        const currentTime = Date.now()
+        const delta = milliseconds - currentTime
+        const time = this.convertMs(delta)
+
+        this.onTick(time)
+      }, 1000)
+    }
+  }
+
+    convertMs(ms) {
   // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
@@ -54,23 +56,23 @@ function convertMs(ms) {
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
+  }
 }
 
-// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+const daysEl = document.querySelector('.days')
+const hoursEl = document.querySelector('.hours')
+const minutesEl = document.querySelector('.minutes')
+const secondsEl = document.querySelector('.seconds')
 
-  
-// console.log(inputEl )
-const options = {
-  enableTime: true,
-  time_24hr: true,
-  defaultDate: new Date(),
-  minuteIncrement: 1,
-  onClose(selectedDates) {
-    console.log(selectedDates[0]);
-  },
-};
+const timerOn = new Timer ({
+  onTick: updateTimer,
+})
 
-flatpickr(inputEl, options);
+function updateTimer({ days, hours, minutes, seconds }) {
+  daysEl.textContent = String(days).padStart(2, '0')
+  hoursEl.textContent = String(hours).padStart(2, '0')
+  minutesEl.textContent = String(minutes).padStart(2, '0')
+  secondsEl.textContent = String(seconds).padStart(2, '0')
+}
 
+startBtn.addEventListener('click', timerOn.start.bind(timerOn))
