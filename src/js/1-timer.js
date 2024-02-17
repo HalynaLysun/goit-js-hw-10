@@ -27,14 +27,29 @@ class Timer {
     this.interval = null;
   }
 
+//   const stopTimer = (this.milliseconds, intervalID) => {
+//   if (selectedDate < Date.now() + 400) {
+//     clearInterval(intervalID);
+//     intervalID = null;
+//   }
+// }
+
   start() {
     const startTime = new Date(inputEl.value)
     const milliseconds = startTime.getTime()
     if (milliseconds < Date.now()) {
-      iziToast.show({
-    title: '',
-    message: 'Please choose a date in the future'
-    });
+      iziToast.error({
+        title: '',
+        message: 'Please choose a date in the future',
+        class: 'popup-message',
+        theme: 'dark',
+        backgroundColor: '#ef4040',
+        messageColor: '#fff',
+        iconUrl: '../img/bi_x-octagon.svg',
+        position: 'topRight',
+        pauseOnHover: true,
+        timeout: 3000,
+      });    
     } else {
       this.interval = setInterval(() => {
         const currentTime = Date.now()
@@ -43,10 +58,13 @@ class Timer {
 
         this.onTick(time)
       }, 1000)
-    }
+  }
   
- 
-
+    // stop() {
+    //   if (Date.now() < milliseconds) {
+    //     clearInterval(time)
+    //   }
+    // }
   }
 
     convertMs(ms) {
