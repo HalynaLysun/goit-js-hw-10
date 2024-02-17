@@ -1,6 +1,10 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.css";
+
+
 const inputEl = document.querySelector('#datetime-picker')
 const startBtn = document.querySelector('button[data-start]')
 
@@ -27,7 +31,10 @@ class Timer {
     const startTime = new Date(inputEl.value)
     const milliseconds = startTime.getTime()
     if (milliseconds < Date.now()) {
-      alert('Error!!! Illegal operation')
+      iziToast.show({
+    title: '',
+    message: 'Please choose a date in the future'
+    });
     } else {
       this.interval = setInterval(() => {
         const currentTime = Date.now()
@@ -37,6 +44,9 @@ class Timer {
         this.onTick(time)
       }, 1000)
     }
+  
+ 
+
   }
 
     convertMs(ms) {
