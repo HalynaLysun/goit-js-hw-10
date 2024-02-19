@@ -27,13 +27,6 @@ class Timer {
     this.interval = null;
   }
 
-//   const stopTimer = (this.milliseconds, intervalID) => {
-//   if (selectedDate < Date.now() + 400) {
-//     clearInterval(intervalID);
-//     intervalID = null;
-//   }
-// }
-
   start() {
     const startTime = new Date(inputEl.value)
     const milliseconds = startTime.getTime()
@@ -57,14 +50,12 @@ class Timer {
         const time = this.convertMs(delta)
 
         this.onTick(time)
+
+      if (delta <= 0) {
+      clearInterval(this.interval);
+      }
       }, 1000)
-  }
-  
-    // stop() {
-    //   if (Date.now() < milliseconds) {
-    //     clearInterval(time)
-    //   }
-    // }
+    }
   }
 
     convertMs(ms) {
@@ -104,3 +95,4 @@ function updateTimer({ days, hours, minutes, seconds }) {
 }
 
 startBtn.addEventListener('click', timerOn.start.bind(timerOn))
+startBtn.addEventListener('click', timerOn.stop.bind(timerOn))
