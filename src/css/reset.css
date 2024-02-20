@@ -56,6 +56,11 @@ body {
   box-sizing: border-box;
 }
 
+.flatpickr-input:disabled {
+  background-color: #FAFAFA;
+  color: #808080;
+}
+
 .flatpickr-input:hover {
   border: 2px solid #000;
 }
@@ -85,9 +90,11 @@ span {
 .timer {
   display: flex;
   gap: 24px;
+  max-width: 355px;
 }
 
-button {
+
+.button-start {
   background-color: #4E75FF;
   color: #fff;
   border-radius: 5px;
@@ -100,8 +107,26 @@ button {
   letter-spacing: 0.64px;
 }
 
+.button-start:disabled {
+  background-color: #CFCFCF;
+  color: #989898;
+}
+
+.wrapper {
+  display: flex;
+  gap: 8px;
+  height: 40px;
+}
+
 .snackbar-button {
+  background-color: #4E75FF;
   width: 360px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  font-family: Montserrat;
+  font-size: 18px;
 }
 
 .form-input-delay {
