@@ -4,12 +4,9 @@ import "flatpickr/dist/flatpickr.min.css";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.css";
 
-function stopTimer(selectedDate, interval) {
-  if (selectedDate < Date.now() + 400) {
-    clearInterval(interval)
-    interval = null
-  }
-}
+
+const inputEl = document.querySelector('#datetime-picker')
+const startBtn = document.querySelector('button[data-start]')
 
 function convertMs(ms) {
   const second = 1000;
@@ -73,21 +70,19 @@ function timerHandler(selectedDate, inputEl, startBtn) {
     mobileInputAttribute(true);
     
     interval = setInterval(() => {
+      if ((userSelectedDate - Date.now()) <= 1000) {
+        inputEl.removeAttribute('disabled', '')
+        clearInterval(interval)
+        interval = null
+      }
       convertMs(selectedDate - Date.now())
-      stopTimer(selectedDate, interval)
-     }, 200)
+      
+     }, 1000)
 
   })
 }
 
-function startTimer() {
-const inputEl = document.querySelector('#datetime-picker')
-const startBtn = document.querySelector('button[data-start]')
 let userSelectedDate
-  
-  if (!inputEl || !startBtn) {
-    return;
-  }
 
 startBtn.setAttribute('disabled', '')
 
@@ -109,9 +104,7 @@ const options = {
 };
 
 flatpickr(inputEl, options);
-}
 
-startTimer()
 
 
 

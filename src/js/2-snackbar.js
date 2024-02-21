@@ -6,31 +6,39 @@ const buttonCreate = document.querySelector('.snackbar-button')
 const formEl = document.querySelector('.form')
 
 function createNotification() {
-    // event.preventDefault()
     return new Promise((res, rej) => {
-        if (formEl.state.value === 'fulfilled') {
-            setTimeout(() => {
-                res(
-                    iziToast.error({
+       setTimeout(() => {
+            if (formEl.state.value === 'fulfilled') {
+                res(inputDelay.value)
+            } else {
+               rej(inputDelay.value)
+            }
+        }, inputDelay.value)
+    })
+}
+
+
+formEl.addEventListener('submit', (event) => {
+    event.preventDefault()
+    createNotification()
+        .then((delay) => {
+            iziToast.error({
+                title: '',
+                message: `Fulfilled promise in ${delay}ms`,
+                class: 'popup-message',
+                iconUrl: '../img/bi_check2-circle.svg',
+                theme: 'dark',
+                backgroundColor: '#59A10D',
+                messageColor: '#fff',
+                position: 'topRight',
+                pauseOnHover: true,
+                timeout: 3000,
+            })
+        })
+        .catch((delay) => {
+        iziToast.error({
                         title: '',
-                        message: `Fulfilled promise in ${inputDelay.value}ms`,
-                        class: 'popup-message',
-                        iconUrl: '../img/bi_check2-circle.svg',
-                        theme: 'dark',
-                        backgroundColor: '#59A10D',
-                        messageColor: '#fff',
-                        position: 'topRight',
-                        pauseOnHover: true,
-                        timeout: 3000,
-                    })
-                )
-            }, inputDelay.value)
-        } else {
-            setTimeout(() => {
-                rej(
-                    iziToast.error({
-                        title: '',
-                        message: `Rejected promise in ${inputDelay.value}ms`,
+                        message: `Rejected promise in ${delay}ms`,
                         class: 'popup-message',
                         iconUrl: '../img/bi_x-octagon.svg',
                         theme: 'dark',
@@ -39,24 +47,8 @@ function createNotification() {
                         position: 'topRight',
                         pauseOnHover: true,
                         timeout: 3000,
-                    })
-                )
-            }, inputDelay.value)
-        }     
+        })
     })
-}
-
-createNotification ()
-    .then((result) => {
-console.log(result)
-    })
-    .catch((error) => {
-console.log(error)
-})
-
-formEl.addEventListener('submit', (event) => {
-    event.preventDefault()
-    createNotification()
     formEl.reset()
 }
 )
