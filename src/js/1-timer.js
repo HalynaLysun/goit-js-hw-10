@@ -18,7 +18,7 @@ const options = {
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  dateFormat: 'Y-m-d h:m',
+  dateFormat: 'Y-m-d hh:mm',
   onClose(selectedDates) {
     if (selectedDates[0] < options.defaultDate) {
         iziToast.error({
