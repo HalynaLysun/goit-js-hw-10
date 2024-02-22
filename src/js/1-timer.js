@@ -1,12 +1,46 @@
-import flatpickr from "flatpickr";
-import "flatpickr/dist/flatpickr.min.css";
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
 
-import iziToast from "izitoast";
-import "izitoast/dist/css/iziToast.css";
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.css';
 
+import cross from '../img/bi_x-octagon.svg';
+
+let userSelectedDate;
 
 const inputEl = document.querySelector('#datetime-picker')
-const startBtn = document.querySelector('button[data-start]')
+const startBtn = document.querySelector('[data-start]') 
+
+startBtn.disabled = true
+
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  dateFormat: 'Y-m-d h:m',
+  onClose(selectedDates) {
+    if (selectedDates[0] < options.defaultDate) {
+        iziToast.error({
+        title: '',
+        message: 'Please choose a date in the future',
+        class: 'popup-message',
+        theme: 'dark',
+        backgroundColor: '#ef4040',
+        messageColor: '#fff',
+        iconUrl: cross,
+        position: 'topRight',
+        pauseOnHover: true,
+        timeout: 3000,
+      });   
+    } else {
+      userSelectedDate = selectedDates[0]
+      startBtn.disabled = false
+    }
+  },
+};
+
+flatpickr(inputEl, options);
 
 function convertMs(ms) {
   const second = 1000;
@@ -24,10 +58,10 @@ function convertMs(ms) {
 }
 
 function updateTimer(days, hours, minutes, seconds) {
-  const daysEl = document.querySelector('.days')
-  const hoursEl = document.querySelector('.hours')
-  const minutesEl = document.querySelector('.minutes')
-  const secondsEl = document.querySelector('.seconds')
+  const daysEl = document.querySelector('[data-days]')
+  const hoursEl = document.querySelector('[data-hours]')
+  const minutesEl = document.querySelector('[data-minutes]')
+  const secondsEl = document.querySelector('[data-seconds]')
   
   daysEl.textContent = String(days).padStart(2, '0')
   hoursEl.textContent = String(hours).padStart(2, '0')
@@ -35,75 +69,24 @@ function updateTimer(days, hours, minutes, seconds) {
   secondsEl.textContent = String(seconds).padStart(2, '0')
 }
 
-function buildErrorMessage() {
-  iziToast.error({
-        title: '',
-        message: 'Please choose a date in the future',
-        class: 'popup-message',
-        theme: 'dark',
-        backgroundColor: '#ef4040',
-        messageColor: '#fff',
-        iconUrl: '../img/bi_x-octagon.svg',
-        position: 'topRight',
-        pauseOnHover: true,
-        timeout: 3000,
-      });    
-}
 
-function mobileInputAttribute(state) {
-  const inputEl = document.querySelector('.flatpickr-input.flatpickr-mobile')
-  
-  if (!inputEl) {
-    return
-  }
-  state ? inputEl.setAttribute('disabled' , '') : inputEl.removeAttribute('disabled')
-}
-
-function timerHandler(selectedDate, inputEl, startBtn) {
-  startBtn.removeAttribute('disabled')
-  inputEl.removeAttribute('disabled')
-  let interval
-
-  startBtn.addEventListener('click', () => {
-    startBtn.setAttribute('disabled', '')
-    inputEl.setAttribute('disabled', '')
-    mobileInputAttribute(true);
+startBtn.addEventListener('click', () => {
+    startBtn.disabled = true
+    inputEl.disabled = true
     
-    interval = setInterval(() => {
-      if ((userSelectedDate - Date.now()) <= 1000) {
-        inputEl.removeAttribute('disabled', '')
+    const interval = setInterval(() => {
+      const currentTime = Date.now()
+      const diff = userSelectedDate - currentTime
+      convertMs(diff)
+      if (diff < 1000) {
+        inputEl.disabled = false
         clearInterval(interval)
-        interval = null
-      }
-      convertMs(selectedDate - Date.now())
-      
+      }      
      }, 1000)
+})
 
-  })
-}
 
-let userSelectedDate
 
-startBtn.setAttribute('disabled', '')
-
-const options = {
-  enableTime: true,
-  time_24hr: true,
-  defaultDate: new Date(),
-  minuteIncrement: 1,
-  dateFormat: 'Y-m-d h:m',
-  onClose(selectedDates) {
-    userSelectedDate = selectedDates[0]
-    if (userSelectedDate <= Date.now() || isNaN(userSelectedDate)) {
-      startBtn.setAttribute('disabled', '')
-      buildErrorMessage()
-    } else {
-      timerHandler(userSelectedDate, inputEl, startBtn)
-    }
-  },
-};
-
-flatpickr(inputEl, options);
 
 
 

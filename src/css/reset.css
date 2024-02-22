@@ -93,20 +93,6 @@ span {
   max-width: 355px;
 }
 
-
-.button-start {
-  background-color: #4E75FF;
-  color: #fff;
-  border-radius: 5px;
-  border: none;
-  width: 75px;
-  height: 40px;
-  font-family: Montserrat;
-  font-size: 16px;
-  line-height: 1.5em;
-  letter-spacing: 0.64px;
-}
-
 .button-start:disabled {
   background-color: #CFCFCF;
   color: #989898;
